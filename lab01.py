@@ -124,6 +124,28 @@ def add_avaliacao(name, data, quarto, avaliacao, nota):
     conn.commit()
     conn.close()
 
+@app.route('/avaliacoes', methods=['GET'])
+@token_required
+def get_avaliacoes():
+    conn = sqlite3.connect('aula03.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM avaliacoes')
+    rows = cursor.fetchall()
+    conn.close()
+
+    avaliacoes = []
+    for row in rows:
+        avaliacoes.append({
+            'id': row[0],
+            'name': row[1],
+            'data': row[2],
+            'quarto': row[3],
+            'avaliacao': row[4],
+            'nota': row[5]
+        })
+
+    return jsonify(avaliacoes), 200
+
 init_db()
 
 if __name__ == '__main__':

@@ -6,8 +6,11 @@ from itsdangerous import URLSafeTimedSerializer
 from cachelib.simple import SimpleCache
 import functools
 import sqlite3
+from flasgger import Swagger
 
 app = Flask(__name__)
+swagger = Swagger(app, template_file='swagger_template.yaml')
+
 
 # Configuração inicial
 SECRET_KEY = '1235aBrcdHOKUk'
@@ -127,6 +130,7 @@ def add_avaliacao(name, data, quarto, avaliacao, nota):
 @app.route('/avaliacoes', methods=['GET'])
 @token_required
 def get_avaliacoes():
+
     conn = sqlite3.connect('aula03.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM avaliacoes')
